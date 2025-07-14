@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Recently Downloaded - ShutterCloud</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+      color: #fff;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 30px;
+      background: #222;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+      position: relative;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      background: linear-gradient(45deg, #ffd700, #ff6b6b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .menu-toggle {
+      cursor: pointer;
+    }
+
+    .menu-toggle div {
+      width: 25px;
+      height: 3px;
+      background-color: #fff;
+      margin: 5px 0;
+    }
+
+    .menu {
+      display: none;
+      position: absolute;
+      top: 60px;
+      right: 30px;
+      background: rgba(17,17,17,0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 15px 20px;
+      border-radius: 12px;
+      z-index: 999;
+    }
+
+    .menu a {
+      display: block;
+      color: #fff;
+      text-decoration: none;
+      margin: 10px 0;
+      transition: 0.3s;
+    }
+
+    .menu a:hover {
+      color: #ffd700;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 50px auto;
+      padding: 0 20px;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+    }
+
+    .image-card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 12px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .image-card img {
+      max-width: 100%;
+      max-height: 180px;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    .image-card h4 {
+      margin: 10px 0;
+      font-size: 1.1rem;
+    }
+
+    .image-card button {
+      padding: 8px 15px;
+      background: #4caf50;
+      border: none;
+      border-radius: 5px;
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .image-card button:hover {
+      background: #45a049;
+    }
+
+    footer {
+      text-align: center;
+      margin: 40px 0 20px;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>ShutterCloud</h1>
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div class="menu" id="menu">
+      <a href="index.html">Home</a>
+      <a href="photographs.html">Photographs</a>
+      <a href="#" onclick="alert('Feedback coming soon!')">Feedback</a>
+    </div>
+  </header>
+
+  <div class="container">
+    <h2>Recently Downloaded Images</h2>
+    <div class="image-grid" id="imageGrid">
+      <!-- Dynamically filled by JavaScript -->
+    </div>
+  </div>
+
+  <footer>&copy; 2025 ShutterCloud. All rights reserved.</footer>
+
+  <script>
+    function toggleMenu() {
+      const menu = document.getElementById("menu");
+      menu.style.display = (menu.style.display === "block") ? "none" : "block";
+    }
+
+    const imageGrid = document.getElementById("imageGrid");
+    const downloads = JSON.parse(localStorage.getItem("recentDownloads") || "[]");
+
+    if (downloads.length === 0) {
+      imageGrid.innerHTML = "<p style='text-align:center; color: #ccc;'>No images downloaded yet.</p>";
+    } else {
+      downloads.forEach((item, index) => {
+        const card = document.createElement("div");
+        card.className = "image-card";
+
+        card.innerHTML = `
+          <img src="${item.src}" alt="Downloaded Image ${index + 1}" />
+          <h4>${item.name}</h4>
+          <button onclick="downloadImage('${item.src}', '${item.name}')">Download Again</button>
+        `;
+
+        imageGrid.appendChild(card);
+      });
+    }
+
+    function downloadImage(src, name) {
+      const link = document.createElement('a');
+      link.href = src;
+      link.download = `${name}.png`;
+      link.click();
+    }
+  </script>
+</body>
+</html>

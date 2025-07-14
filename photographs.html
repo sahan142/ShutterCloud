@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Photographs - ShutterCloud</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 30px;
+      background: #222;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+      position: relative;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      background: linear-gradient(45deg, #ffd700, #ff6b6b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .menu-toggle {
+      cursor: pointer;
+    }
+
+    .menu-toggle div {
+      width: 25px;
+      height: 3px;
+      background-color: #fff;
+      margin: 5px 0;
+    }
+
+    .menu {
+      display: none;
+      position: absolute;
+      top: 60px;
+      right: 30px;
+      background: rgba(17,17,17,0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 15px 20px;
+      border-radius: 12px;
+      z-index: 999;
+    }
+
+    .menu a {
+      display: block;
+      color: #fff;
+      text-decoration: none;
+      margin: 10px 0;
+      transition: 0.3s;
+    }
+
+    .menu a:hover {
+      color: #ffd700;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    .upload-box {
+      background: rgba(255,255,255,0.05);
+      border: 2px dashed rgba(255,255,255,0.2);
+      padding: 30px;
+      border-radius: 15px;
+    }
+
+    .upload-box input[type="file"],
+    .upload-box input[type="text"] {
+      margin: 15px 0;
+      padding: 10px;
+      width: 100%;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .preview-img {
+      margin-top: 20px;
+      max-width: 100%;
+      max-height: 300px;
+      display: none;
+      border-radius: 10px;
+    }
+
+    .download-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #4caf50;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .download-btn:hover {
+      background: #45a049;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 10px;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>ShutterCloud</h1>
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div class="menu" id="menu">
+      <a href="index.html">Home</a>
+     <a href="recentlydownload.html">Recently Download</a>
+      <a href="#" onclick="alert('Feedback coming soon!')">Feedback</a>
+    </div>
+  </header>
+
+  <div class="container">
+    <h2>Upload Your Photograph</h2>
+    <div class="upload-box">
+      <input type="file" accept="image/*" id="imageInput" />
+      <input type="text" id="imageName" placeholder="Enter image name..." />
+      <img id="preview" class="preview-img" />
+      <button class="download-btn" id="downloadBtn" style="display:none">Download Image</button>
+    </div>
+  </div>
+
+  <footer>&copy; 2025 ShutterCloud. All rights reserved.</footer>
+
+  <script>
+    const imageInput = document.getElementById('imageInput');
+    const imageNameInput = document.getElementById('imageName');
+    const preview = document.getElementById('preview');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    function toggleMenu() {
+      const menu = document.getElementById("menu");
+      menu.style.display = (menu.style.display === "block") ? "none" : "block";
+    }
+
+    imageInput.addEventListener('change', () => {
+      const file = imageInput.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          preview.src = e.target.result;
+          preview.style.display = 'block';
+          downloadBtn.style.display = 'inline-block';
+          downloadBtn.setAttribute('href', e.target.result);
+        }
+        reader.readAsDataURL(file);
+      }
+    });
+
+    downloadBtn.addEventListener('click', () => {
+      const name = imageNameInput.value.trim() || 'download';
+      const link = document.createElement('a');
+      link.download = `${name}.png`;
+      link.href = preview.src;
+      link.click();
+
+      // Store to localStorage for "Recently Download"
+      const downloads = JSON.parse(localStorage.getItem("recentDownloads") || "[]");
+      downloads.unshift({ name, src: preview.src });
+      localStorage.setItem("recentDownloads", JSON.stringify(downloads));
+    });
+  </script>
+</body>
+</html>

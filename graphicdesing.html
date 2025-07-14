@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Graphic Design - ShutterCloud</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 30px;
+      background: #222;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+      position: relative;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      background: linear-gradient(45deg, #ffd700, #ff6b6b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .menu-toggle {
+      cursor: pointer;
+    }
+
+    .menu-toggle div {
+      width: 25px;
+      height: 3px;
+      background-color: #fff;
+      margin: 5px 0;
+    }
+
+    .menu {
+      display: none;
+      position: absolute;
+      top: 60px;
+      right: 30px;
+      background: rgba(17,17,17,0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 15px 20px;
+      border-radius: 12px;
+      z-index: 999;
+    }
+
+    .menu a {
+      display: block;
+      color: #fff;
+      text-decoration: none;
+      margin: 10px 0;
+      transition: 0.3s;
+    }
+
+    .menu a:hover {
+      color: #ffd700;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 50px auto;
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    .upload-box {
+      background: rgba(255,255,255,0.05);
+      border: 2px dashed rgba(255,255,255,0.2);
+      padding: 30px;
+      border-radius: 15px;
+      margin-bottom: 40px;
+    }
+
+    .upload-box input,
+    .upload-box button {
+      margin: 10px 0;
+      padding: 10px;
+      width: 100%;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .upload-box button {
+      background: #007bff;
+      color: white;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .upload-box button:hover {
+      background: #0056b3;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 15px;
+      text-align: center;
+    }
+
+    .card img,
+    .card video {
+      max-width: 100%;
+      max-height: 200px;
+      margin-bottom: 10px;
+      border-radius: 8px;
+    }
+
+    .card p {
+      margin: 8px 0;
+      color: #ccc;
+      font-size: 0.95rem;
+    }
+
+    .card button {
+      padding: 8px 16px;
+      background: #4caf50;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .card button:hover {
+      background: #45a049;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 10px;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>ShutterCloud</h1>
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div class="menu" id="menu">
+      <a href="index.html">Home</a>
+      <a href="recentlydownload.html">Recently Download</a>
+      <a href="#" onclick="alert('Feedback coming soon!')">Feedback</a>
+    </div>
+  </header>
+
+  <div class="container">
+    <h2>Upload Your Graphic Content</h2>
+    <div class="upload-box">
+      <input type="file" accept="image/*,video/*,.pdf,.doc,.docx,.ppt,.pptx" id="fileInput">
+      <input type="text" id="fileName" placeholder="Enter file name..." />
+      <button id="uploadBtn">Upload to Site</button>
+    </div>
+
+    <div class="gallery" id="gallery">
+      <!-- Dynamic content appears here -->
+    </div>
+  </div>
+
+  <footer>&copy; 2025 ShutterCloud. All rights reserved.</footer>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const fileNameInput = document.getElementById('fileName');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const gallery = document.getElementById('gallery');
+
+    function toggleMenu() {
+      const menu = document.getElementById("menu");
+      menu.style.display = (menu.style.display === "block") ? "none" : "block";
+    }
+
+    uploadBtn.addEventListener('click', () => {
+      const file = fileInput.files[0];
+      const name = fileNameInput.value.trim() || 'Untitled';
+
+      if (!file) {
+        alert("Please select a file to upload.");
+        return;
+      }
+
+      const fileURL = URL.createObjectURL(file);
+      const fileType = file.type;
+      const ext = file.name.split('.').pop();
+
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      let mediaElement = '';
+
+      if (fileType.startsWith('image/')) {
+        mediaElement = `<img src="${fileURL}" alt="${name}"/>`;
+      } else if (fileType.startsWith('video/')) {
+        mediaElement = `<video src="${fileURL}" controls></video>`;
+      } else {
+        mediaElement = `<p>📄 ${file.name}</p>`;
+      }
+
+      card.innerHTML = `
+        ${mediaElement}
+        <p><strong>${name}</strong></p>
+        <button onclick="downloadFile('${fileURL}', '${name}.${ext}')">Download</button>
+      `;
+
+      gallery.prepend(card);
+
+      // Store to localStorage
+      const downloads = JSON.parse(localStorage.getItem("recentDownloads") || "[]");
+      downloads.unshift({ name, src: fileURL });
+      if (downloads.length > 10) downloads.pop();
+      localStorage.setItem("recentDownloads", JSON.stringify(downloads));
+
+      // Reset input
+      fileInput.value = "";
+      fileNameInput.value = "";
+    });
+
+    function downloadFile(url, filename) {
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+  </script>
+</body>
+</html>

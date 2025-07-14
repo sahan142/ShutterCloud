@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Graphic Design - ShutterCloud</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #0a0a0a, #1a1a1a);
+      color: #fff;
+      overflow-x: hidden;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 30px;
+      background: #222;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.5);
+      position: relative;
+    }
+
+    header h1 {
+      font-size: 1.8rem;
+      background: linear-gradient(45deg, #ffd700, #ff6b6b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .menu-toggle {
+      cursor: pointer;
+    }
+
+    .menu-toggle div {
+      width: 25px;
+      height: 3px;
+      background-color: #fff;
+      margin: 5px 0;
+    }
+
+    .menu {
+      display: none;
+      position: absolute;
+      top: 60px;
+      right: 30px;
+      background: rgba(17,17,17,0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 15px 20px;
+      border-radius: 12px;
+      z-index: 999;
+    }
+
+    .menu a {
+      display: block;
+      color: #fff;
+      text-decoration: none;
+      margin: 10px 0;
+      transition: 0.3s;
+    }
+
+    .menu a:hover {
+      color: #ffd700;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 50px auto;
+      text-align: center;
+      padding: 0 20px;
+    }
+
+    .upload-box {
+      background: rgba(255,255,255,0.05);
+      border: 2px dashed rgba(255,255,255,0.2);
+      padding: 30px;
+      border-radius: 15px;
+    }
+
+    .upload-box input[type="file"],
+    .upload-box input[type="text"] {
+      margin: 15px 0;
+      padding: 10px;
+      width: 100%;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .preview-media {
+      margin-top: 20px;
+      max-width: 100%;
+      max-height: 300px;
+      display: none;
+      border-radius: 10px;
+    }
+
+    .download-btn {
+      margin-top: 20px;
+      padding: 10px 20px;
+      background: #4caf50;
+      border: none;
+      border-radius: 6px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .download-btn:hover {
+      background: #45a049;
+    }
+
+    footer {
+      text-align: center;
+      padding: 30px 10px;
+      color: #aaa;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>ShutterCloud</h1>
+    <div class="menu-toggle" onclick="toggleMenu()">
+      <div></div>
+      <div></div>
+      <div></div>
+    </div>
+    <div class="menu" id="menu">
+      <a href="index.html">Home</a>
+      <a href="recentlydownload.html">Recently Download</a>
+      <a href="#" onclick="alert('Feedback coming soon!')">Feedback</a>
+    </div>
+  </header>
+
+  <div class="container">
+    <h2>Upload Your Graphic Content</h2>
+    <div class="upload-box">
+      <input type="file" accept="image/*,video/*,.pdf,.doc,.docx,.ppt,.pptx" id="fileInput" />
+      <input type="text" id="fileName" placeholder="Enter file name..." />
+      <img id="previewImage" class="preview-media" />
+      <video id="previewVideo" class="preview-media" controls></video>
+      <p id="fileNotice" style="display:none; margin-top: 10px; color: #ccc;"></p>
+      <button class="download-btn" id="downloadBtn" style="display:none">Download File</button>
+    </div>
+  </div>
+
+  <footer>&copy; 2025 ShutterCloud. All rights reserved.</footer>
+
+  <script>
+    const fileInput = document.getElementById('fileInput');
+    const fileNameInput = document.getElementById('fileName');
+    const previewImage = document.getElementById('previewImage');
+    const previewVideo = document.getElementById('previewVideo');
+    const fileNotice = document.getElementById('fileNotice');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    function toggleMenu() {
+      const menu = document.getElementById("menu");
+      menu.style.display = (menu.style.display === "block") ? "none" : "block";
+    }
+
+    fileInput.addEventListener('change', () => {
+      const file = fileInput.files[0];
+      if (!file) return;
+
+      const fileURL = URL.createObjectURL(file);
+      const fileType = file.type;
+
+      // Reset
+      previewImage.style.display = 'none';
+      previewVideo.style.display = 'none';
+      fileNotice.style.display = 'none';
+
+      if (fileType.startsWith('image/')) {
+        previewImage.src = fileURL;
+        previewImage.style.display = 'block';
+      } else if (fileType.startsWith('video/')) {
+        previewVideo.src = fileURL;
+        previewVideo.style.display = 'block';
+      } else {
+        fileNotice.textContent = `Selected file: ${file.name}`;
+        fileNotice.style.display = 'block';
+      }
+
+      downloadBtn.style.display = 'inline-block';
+    });
+
+    downloadBtn.addEventListener('click', () => {
+      const file = fileInput.files[0];
+      if (!file) return;
+
+      const name = fileNameInput.value.trim() || 'download';
+      const link = document.createElement('a');
+      link.download = `${name}${getExtension(file.name)}`;
+      link.href = URL.createObjectURL(file);
+      link.click();
+
+      // Store in localStorage
+      const downloads = JSON.parse(localStorage.getItem("recentDownloads") || "[]");
+      downloads.unshift({ name, src: URL.createObjectURL(file) });
+
+      // Keep last 5 only (optional)
+      if (downloads.length > 5) downloads.pop();
+
+      localStorage.setItem("recentDownloads", JSON.stringify(downloads));
+    });
+
+    function getExtension(filename) {
+      return filename.includes('.') ? '.' + filename.split('.').pop() : '';
+    }
+  </script>
+</body>
+</html>

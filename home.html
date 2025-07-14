@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShutterCloud - Home</title>
+
+  <!-- Google Fonts: Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 100%);
+      color: #fff;
+      font-family: 'Poppins', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Header Styles */
+    header {
+      text-align: center;
+      padding: 40px 20px;
+      background: linear-gradient(45deg, #333, #555);
+      margin-bottom: 60px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      position: relative;
+    }
+
+    header::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, rgba(255,215,0,0.1), rgba(255,107,107,0.1));
+      pointer-events: none;
+    }
+
+    header h1 {
+      font-size: 4rem;
+      font-weight: 700;
+      background: linear-gradient(45deg, #ffd700, #ff6b6b);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      margin-bottom: 15px;
+      position: relative;
+      z-index: 1;
+    }
+
+    header p {
+      font-size: 1.3rem;
+      color: #ddd;
+      font-weight: 300;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Hamburger menu */
+    .menu-toggle {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      cursor: pointer;
+      z-index: 1001;
+    }
+
+    .menu-toggle div {
+      width: 25px;
+      height: 3px;
+      background-color: #fff;
+      margin: 5px 0;
+      transition: 0.3s;
+    }
+
+    .menu {
+      display: none;
+      position: absolute;
+      top: 60px;
+      right: 20px;
+      background: rgba(17, 17, 17, 0.95);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255,255,255,0.2);
+      padding: 20px;
+      border-radius: 15px;
+      z-index: 1000;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    .menu a {
+      display: block;
+      color: #fff;
+      text-decoration: none;
+      margin: 12px 0;
+      padding: 8px 12px;
+      border-radius: 8px;
+      transition: background 0.3s ease;
+      font-weight: 500;
+    }
+
+    .menu a:hover {
+      background: rgba(255,255,255,0.1);
+      color: #ffd700;
+    }
+
+    /* Main Content */
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 60vh;
+      gap: 40px;
+    }
+
+    .page-title {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .page-title h2 {
+      font-size: 2.5rem;
+      font-weight: 600;
+      color: #fff;
+      margin-bottom: 10px;
+    }
+
+    .page-title p {
+      font-size: 1.2rem;
+      color: #ccc;
+      font-weight: 300;
+    }
+
+    /* Category Buttons */
+    .category-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    .category-btn {
+      background: rgba(255,255,255,0.08);
+      backdrop-filter: blur(15px);
+      border: 2px solid rgba(255,255,255,0.1);
+      border-radius: 25px;
+      padding: 40px 30px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.4s ease;
+      text-decoration: none;
+      color: #fff;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .category-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(45deg, rgba(255,215,0,0.1), rgba(255,107,107,0.1));
+      transition: left 0.5s ease;
+    }
+
+    .category-btn:hover::before {
+      left: 0;
+    }
+
+    .category-btn:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+      border-color: rgba(255,215,0,0.5);
+    }
+
+    .category-icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+      display: block;
+      position: relative;
+      z-index: 1;
+    }
+
+    .category-btn h3 {
+      font-size: 1.8rem;
+      font-weight: 600;
+      margin-bottom: 15px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .category-btn p {
+      font-size: 1.1rem;
+      color: #ccc;
+      line-height: 1.6;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Specific button colors */
+    .photography-btn:hover {
+      background: rgba(255,107,107,0.1);
+    }
+
+    .design-btn:hover {
+      background: rgba(255,215,0,0.1);
+    }
+
+    .innovation-btn:hover {
+      background: rgba(107,255,107,0.1);
+    }
+
+    /* Modal styles from original */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 2000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.8);
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-content {
+      background-color: #111;
+      padding: 30px;
+      border-radius: 8px;
+      text-align: center;
+      max-width: 400px;
+      color: #fff;
+    }
+
+    .modal-content textarea {
+      width: 100%;
+      height: 80px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 5px;
+      padding: 10px;
+      font-family: 'Poppins', sans-serif;
+      resize: vertical;
+    }
+
+    .modal-content button {
+      margin-top: 15px;
+      padding: 10px 20px;
+      background-color: #fff;
+      color: #000;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .modal-content button:hover {
+      background-color: #ccc;
+    }
+
+    .close-btn {
+      float: right;
+      font-size: 20px;
+      cursor: pointer;
+      color: #aaa;
+    }
+
+    .close-btn:hover {
+      color: #fff;
+    }
+
+    .thank-you-modal .modal-content {
+      background-color: #2d5a27;
+      border: 2px solid #4caf50;
+    }
+
+    .thank-you-modal h3 {
+      color: #4caf50;
+      margin-bottom: 15px;
+    }
+
+    .thank-you-modal p {
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .user-email {
+      background-color: #333;
+      padding: 10px;
+      border-radius: 5px;
+      margin-top: 10px;
+      font-family: 'Poppins', sans-serif;
+      border: 1px solid #555;
+      color: #fff;
+      width: 100%;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+      text-align: left;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+
+    .star-rating {
+      display: flex;
+      justify-content: center;
+      margin: 20px 0;
+      gap: 5px;
+    }
+
+    .star {
+      font-size: 2rem;
+      color: #555;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .star:hover,
+    .star.active {
+      color: #ffd700;
+    }
+
+    .star:hover ~ .star {
+      color: #555;
+    }
+
+    .sent-btn {
+      background-color: #4caf50 !important;
+      color: #fff !important;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .sent-btn:hover {
+      background-color: #45a049 !important;
+    }
+
+    .sent-btn:disabled {
+      background-color: #666 !important;
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      position: fixed;
+      bottom: 10px;
+      width: 100%;
+      font-size: 0.9rem;
+      color: #aaa;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      header h1 {
+        font-size: 3rem;
+      }
+
+      .category-buttons {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .category-btn {
+        padding: 30px 20px;
+      }
+
+      .category-icon {
+        font-size: 3rem;
+      }
+
+      .category-btn h3 {
+        font-size: 1.5rem;
+      }
+
+      .page-title h2 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="menu-toggle" onclick="toggleMenu()">
+    <div></div>
+    <div></div>
+    <div></div>
+  </div>
+
+  <div class="menu" id="menu">
+    <a href="aboutus.html">About Us</a>
+    <a href="#">Recently Download</a>
+    <a href="#" onclick="showComments()">Comments</a>
+  </div>
+
+  <header>
+    <h1>ShutterCloud</h1>
+    <p>Capturing Moments, Creating Memories</p>
+  </header>
+
+  <div class="container">
+    <div class="main-content">
+      <div class="page-title">
+        <h2>Explore Our Services</h2>
+        <p>Choose from our professional categories</p>
+      </div>
+
+      <div class="category-buttons">
+        <a href="photographs.html" class="category-btn photography-btn">
+          <span class="category-icon">📸</span>
+          <h3>Photographs</h3>
+          <p>Professional photography services, photo editing, and stunning visual captures for every occasion</p>
+        </a>
+
+        <a href="graphicdesing.html" class="category-btn design-btn">
+          <span class="category-icon">🎨</span>
+          <h3>Graphic Designs</h3>
+          <p>Creative visual solutions, branding, logos, and artistic designs that bring your vision to life</p>
+        </a>
+
+        <a href="innovation.html" class="category-btn innovation-btn">
+          <span class="category-icon">🚀</span>
+          <h3>Digital Innovations</h3>
+          <p>Cutting-edge technology solutions, digital transformation, and innovative creative approaches</p>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <footer>&copy; 2025 ShutterCloud. All rights reserved.</footer>
+
+  <!-- Feedback Modal on page load -->
+  <div class="modal" id="feedbackModal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('feedbackModal')">&times;</span>
+      <h3>We value your feedback!</h3>
+      <p>Please rate your experience with ShutterCloud:</p>
+      <div class="star-rating">
+        <span class="star" data-rating="1">★</span>
+        <span class="star" data-rating="2">★</span>
+        <span class="star" data-rating="3">★</span>
+        <span class="star" data-rating="4">★</span>
+        <span class="star" data-rating="5">★</span>
+      </div>
+      <button id="feedbackSendBtn" class="sent-btn" disabled onclick="sendFeedback()">
+        <span>📧</span> Send
+      </button>
+    </div>
+  </div>
+
+  <!-- Comment Modal -->
+  <div class="modal" id="commentModal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('commentModal')">&times;</span>
+      <h3>Your Comments Help Us Improve</h3>
+      <form id="commentForm">
+        <div class="form-group">
+          <label for="userEmail">Your Email (optional):</label>
+          <input type="email" id="userEmail" class="user-email" placeholder="your.email@example.com">
+        </div>
+        <div class="form-group">
+          <label for="commentText">Your Comment:</label>
+          <textarea id="commentText" name="comment" placeholder="Type your comment here..." required></textarea>
+        </div>
+        <button type="submit">Send Comment</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Thank You Modal -->
+  <div class="modal thank-you-modal" id="thankYouModal">
+    <div class="modal-content">
+      <span class="close-btn" onclick="closeModal('thankYouModal')">&times;</span>
+      <h3>Thank You for Your Feedback! 🎉</h3>
+      <p>Your comment has been processed and will be sent to our team.</p>
+      <p>We appreciate your time and input to help us improve ShutterCloud!</p>
+      <button onclick="closeModal('thankYouModal')">Close</button>
+    </div>
+  </div>
+
+  <script>
+    let selectedRating = 0;
+
+    function toggleMenu() {
+      const menu = document.getElementById("menu");
+      menu.style.display = (menu.style.display === "block") ? "none" : "block";
+    }
+
+    function showComments() {
+      closeMenu();
+      document.getElementById("commentModal").style.display = "flex";
+    }
+
+    function closeModal(id) {
+      document.getElementById(id).style.display = "none";
+    }
+
+    function closeMenu() {
+      document.getElementById("menu").style.display = "none";
+    }
+
+    // Star rating functionality
+    function initStarRating() {
+      const stars = document.querySelectorAll('.star');
+      const sendBtn = document.getElementById('feedbackSendBtn');
+      
+      stars.forEach((star, index) => {
+        star.addEventListener('click', function() {
+          selectedRating = parseInt(this.dataset.rating);
+          updateStars(selectedRating);
+          sendBtn.disabled = false;
+        });
+        
+        star.addEventListener('mouseover', function() {
+          const hoverRating = parseInt(this.dataset.rating);
+          updateStars(hoverRating);
+        });
+      });
+      
+      document.querySelector('.star-rating').addEventListener('mouseleave', function() {
+        updateStars(selectedRating);
+      });
+    }
+
+    function updateStars(rating) {
+      const stars = document.querySelectorAll('.star');
+      stars.forEach((star, index) => {
+        if (index < rating) {
+          star.classList.add('active');
+        } else {
+          star.classList.remove('active');
+        }
+      });
+    }
+
+    function sendFeedback() {
+      if (selectedRating === 0) {
+        alert('Please select a rating before sending.');
+        return;
+      }
+      
+      const emailSubject = 'ShutterCloud User Rating';
+      const emailBody = `User Rating: ${selectedRating} out of 5 stars\n\nSent from ShutterCloud Website`;
+      
+      const mailtoLink = `mailto:tshan471@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+      
+      window.location.href = mailtoLink;
+      
+      closeModal('feedbackModal');
+      document.getElementById('thankYouModal').style.display = 'flex';
+      
+      // Reset rating
+      selectedRating = 0;
+      updateStars(0);
+      document.getElementById('feedbackSendBtn').disabled = true;
+    }
+
+    // Handle form submission
+    document.getElementById('commentForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const comment = document.getElementById('commentText').value;
+      const userEmail = document.getElementById('userEmail').value;
+      
+      if (comment.trim() === '') {
+        alert('Please enter a comment before sending.');
+        return;
+      }
+      
+      const emailSubject = 'ShutterCloud User Feedback';
+      const emailBody = `User Comment: ${comment}${userEmail ? `\n\nUser Email: ${userEmail}` : '\n\nUser Email: Not provided'}\n\nSent from ShutterCloud Website`;
+      
+      const mailtoLink = `mailto:tshan471@gmail.com?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+      
+      window.location.href = mailtoLink;
+      
+      closeModal('commentModal');
+      document.getElementById('thankYouModal').style.display = 'flex';
+      
+      document.getElementById('commentForm').reset();
+    });
+
+    // Show feedback modal on load
+    window.onload = function() {
+      document.getElementById("feedbackModal").style.display = "flex";
+      initStarRating();
+    };
+
+    // Close modal when clicking outside of it
+    window.onclick = function(event) {
+      const modals = document.getElementsByClassName('modal');
+      for (let i = 0; i < modals.length; i++) {
+        if (event.target === modals[i]) {
+          modals[i].style.display = 'none';
+        }
+      }
+    };
+  </script>
+</body>
+</html>
